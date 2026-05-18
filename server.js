@@ -183,6 +183,12 @@ ${query}
   PLAN GENERATION
 */
 async function planExecution(query, skills) {
+  // Reduce token usage by only sending name and snippet to the LLM
+  const simplifiedSkills = skills.map(s => ({
+    name: s.name,
+    snippet: s.snippet
+  }));
+
   const prompt = `
 You are a system planner.
 
@@ -192,7 +198,7 @@ Query:
 ${query}
 
 Skills:
-${JSON.stringify(skills)}
+${JSON.stringify(simplifiedSkills)}
 
 Return JSON:
 [
