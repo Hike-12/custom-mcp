@@ -1,3 +1,4 @@
+import "dotenv/config";
 import fs from "fs/promises";
 import path from "path";
 import MiniSearch from "minisearch";
@@ -13,10 +14,9 @@ import {
 /*
   CONFIG
 */
-const SKILLS_DIR =
-  "C:/Users/Lenovo/Desktop/Aliqyaan Coding/SKILLS MCP";
+const SKILLS_DIR = process.env.SKILLS_DIR;
 
-const GROQ_API_KEY = "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"; // replace
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
 console.error("Starting...");
 /*
   MINISEARCH
