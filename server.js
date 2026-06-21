@@ -1,6 +1,12 @@
-import "dotenv/config";
 import fs from "fs/promises";
 import path from "path";
+import { fileURLToPath } from "url";
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const envContent = await fs.readFile(path.join(__dirname, ".env"), "utf-8");
+envContent.split("\n").forEach(line => {
+  const [key, ...val] = line.split("=");
+  if (key && val.length > 0) process.env[key.trim()] = val.join("=").trim();
+});
 import MiniSearch from "minisearch";
 import { exec } from "child_process";
 
@@ -17,7 +23,6 @@ import {
 const SKILLS_DIR = process.env.SKILLS_DIR;
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
-console.error("Starting...");
 /*
   MINISEARCH
 */
@@ -85,7 +90,6 @@ async function initSkills() {
   }
 
   miniSearch.addAll(docs);
-  console.error(`Loaded ${docs.length} skills`);
 }
 
 /*
