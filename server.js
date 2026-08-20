@@ -112,7 +112,7 @@ async function callLlama(prompt) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant",
+        model: "meta-llama/llama-prompt-guard-2-86m",
         messages: [
           {
             role: "user",
