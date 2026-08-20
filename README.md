@@ -1,6 +1,6 @@
 # Custom MCP
 
-An MCP (Model Context Protocol) server that uses local skill files and Groq LLM to plan and execute engineering tasks.
+An MCP (Model Context Protocol) server that uses local skill files and Groq LLM (llama 3.1b) to plan and execute engineering tasks.
 
 ## Setup
 
