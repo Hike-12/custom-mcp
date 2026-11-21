@@ -112,7 +112,7 @@ async function callLlama(prompt) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "meta-llama/llama-prompt-guard-2-86m",
+        model: "openai/gpt-oss-20b",
         messages: [
           {
             role: "user",
@@ -157,6 +157,30 @@ async function getProjectContext() {
 }
 
 /*
+  ROBUST JSON ARRAY PARSING
+*/
+function parseJsonArray(text) {
+  const tryParse = s => {
+    try {
+      const parsed = JSON.parse(s);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const direct = tryParse(text);
+  if (direct) return direct;
+
+  const valid = [];
+  for (const m of text.matchAll(/\[[\s\S]*?\]/g)) {
+    const arr = tryParse(m[0]);
+    if (arr) valid.push(arr);
+  }
+  return valid.length > 0 ? valid[valid.length - 1] : null;
+}
+
+/*
   INTENT EXTRACTION
 */
 async function getIntents(query, projectContext) {
@@ -176,11 +200,7 @@ ${query}
 
   const res = await callLlama(prompt);
 
-  try {
-    return JSON.parse(res);
-  } catch {
-    return [query];
-  }
+  return parseJsonArray(res) ?? [query];
 }
 
 /*
@@ -212,11 +232,7 @@ Return JSON:
 
   const res = await callLlama(prompt);
 
-  try {
-    return JSON.parse(res);
-  } catch {
-    return [];
-  }
+  return parseJsonArray(res) ?? [];
 }
 
 /*
